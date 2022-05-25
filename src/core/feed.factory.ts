@@ -4,6 +4,7 @@ import {
   AccountFollowingFeed,
   BestiesFeed,
   BlockedUsersFeed,
+  ClipsFeed,
   DirectInboxFeed,
   DirectPendingInboxFeed,
   DirectThreadFeed,
@@ -97,6 +98,13 @@ export class FeedFactory {
 
   public blockedUsers(): BlockedUsersFeed {
     return new BlockedUsersFeed(this.client);
+  }
+
+  public clips(id: string | number, max_id?: string | number): ClipsFeed {
+    const feed = new ClipsFeed(this.client);
+    feed.id = id;
+    feed.max_id = max_id;
+    return feed;
   }
 
   public directInbox(): DirectInboxFeed {

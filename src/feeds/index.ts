@@ -3,6 +3,7 @@ export * from './account-following.feed';
 export * from './account-friendships.feed';
 export * from './account-friendships-besties.feed';
 export * from './blocked-users.feed';
+export * from './clips.feed';
 export * from './direct-inbox.feed';
 export * from './direct-thread.feed';
 export * from './discover.feed';
