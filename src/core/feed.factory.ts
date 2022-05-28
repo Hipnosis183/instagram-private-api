@@ -5,6 +5,8 @@ import {
   BestiesFeed,
   BlockedUsersFeed,
   ClipsFeed,
+  CollectionFeed,
+  CollectionsFeed,
   DirectInboxFeed,
   DirectPendingInboxFeed,
   DirectThreadFeed,
@@ -221,6 +223,16 @@ export class FeedFactory {
 
   public storiesInsights(timeframe: 'ONE_DAY' | 'ONE_WEEK' | 'TWO_WEEKS') {
     return plainToClassFromExist(new StoriesInsightsFeed(this.client), { timeframe });
+  }
+
+  public collection(id: string | number): CollectionFeed {
+    const feed = new CollectionFeed(this.client);
+    feed.id = id;
+    return feed;
+  }
+
+  public collections(): CollectionsFeed {
+    return new CollectionsFeed(this.client);
   }
 
   public saved(): SavedFeed {

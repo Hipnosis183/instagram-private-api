@@ -1,7 +1,8 @@
 import { Expose } from 'class-transformer';
 import { Feed } from '../core/feed';
 
-export class SavedFeed extends Feed<any> {
+export class CollectionFeed extends Feed<any> {
+  id: number | string;
   @Expose()
   private nextMaxId: string;
 
@@ -12,7 +13,7 @@ export class SavedFeed extends Feed<any> {
 
   async request(): Promise<any> {
     const { body } = await this.client.request.send({
-      url: '/api/v1/feed/saved/posts/',
+      url: `/api/v1/feed/collection/${this.id}/posts/`,
       qs: {
         max_id: this.nextMaxId,
       },

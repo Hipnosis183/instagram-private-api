@@ -1,7 +1,7 @@
 import { Expose } from 'class-transformer';
 import { Feed } from '../core/feed';
 
-export class SavedFeed extends Feed<any> {
+export class CollectionsFeed extends Feed<any> {
   @Expose()
   private nextMaxId: string;
 
@@ -12,17 +12,20 @@ export class SavedFeed extends Feed<any> {
 
   async request(): Promise<any> {
     const { body } = await this.client.request.send({
-      url: '/api/v1/feed/saved/posts/',
+      url: '/api/v1/collections/list/',
       qs: {
         max_id: this.nextMaxId,
+        collection_types: '["ALL_MEDIA_AUTO_COLLECTION", "MEDIA"]',
+        include_public_only: 0,
+        get_cover_media_lists: true,
       },
     });
     this.state = body;
     return body;
   }
 
-  async items(): Promise<any[]> {
-    const { items } = await this.request();
-    return items.map(i => i.media);
+  async items() {
+    const body = await this.request();
+    return body.items;
   }
 }

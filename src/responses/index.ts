@@ -66,7 +66,6 @@ export * from './media.repository.info.response';
 export * from './media.repository.configure.response';
 export * from './media.repository.configure-sidecar.response';
 export * from './media.repository.configure-video.response';
-export * from './saved.feed.response';
 export * from './status.response';
 export * from './reels-tray.feed.response';
 export * from './music.repository.moods.response';

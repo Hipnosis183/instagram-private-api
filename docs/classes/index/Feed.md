@@ -41,8 +41,6 @@
 
   ↳↳ [`ReelsMediaFeed`](../feeds/ReelsMediaFeed.md)
 
-  ↳↳ [`SavedFeed`](../feeds/SavedFeed.md)
-
   ↳↳ [`TagFeed`](../feeds/TagFeed.md)
 
   ↳↳ [`TagsFeed`](../feeds/TagsFeed.md)
