@@ -677,15 +677,14 @@ export class MediaRepository extends Repository {
     return body;
   }
 
-  // tip: id = savedFeed.items()[0].media.id
   /**
-   * save a media, or save it to collection if you pass the collection ids in array
+   * Save a media, or save it to collection if you pass the collection ids in array
    * @param {string} mediaId - The mediaId of the post
-   * @param {string[]} [collection_ids] - Optional, The array of collection ids if you want to save the media to a specific collection
+   * @param {string[]} [collection_ids] - Optional, the array of collection ids if you want to save the media to a specific collection
    * Example: 
    * save("2524149952724070925_1829855275") save media
    * save("2524149952724070925_1829855275", ["17865977635619975"]) save media to 1 collection
-   * save("2524149952724070925_1829855275", ["17865977635619975", "17845997638619928"]) save media to 2 collection 
+   * save("2524149952724070925_1829855275", ["17865977635619975", "17845997638619928"]) save media to 2 collections
    */
   public async save(mediaId: string, collection_ids?: string[]) {
     const { body } = await this.client.request.send({
@@ -702,10 +701,26 @@ export class MediaRepository extends Repository {
     return body;
   }
 
-  async unsave(mediaId: string) {
+  /**
+   * Unsave a media, or unsave it from collection if you pass the collection ids in array
+   * @param {string} mediaId - The mediaId of the post
+   * @param {string[]} [collection_ids] - Optional, the array of collection ids if you want to unsave the media from a specific collection
+   * Example: 
+   * unsave("2524149952724070925_1829855275") unsave media
+   * unsave("2524149952724070925_1829855275", ["17865977635619975"]) unsave media from 1 collection
+   * unsave("2524149952724070925_1829855275", ["17865977635619975", "17845997638619928"]) unsave media from 2 collections
+   */
+  async unsave(mediaId: string, collection_ids?: string[]) {
     const { body } = await this.client.request.send({
-      url: `/api/v1/media/${mediaId}/unsave/`,
+      url: `/api/v1/media/${mediaId}/${collection_ids ? 'save' : 'unsave'}/`,
       method: 'POST',
+      form: this.client.request.sign({
+        removed_collection_ids: collection_ids ? JSON.stringify(collection_ids) : undefined,
+        _uuid: this.client.state.uuid,
+        _uid: this.client.state.cookieUserId,
+        _csrftoken: this.client.state.cookieCsrfToken,
+        device_id: this.client.state.deviceId,
+      }),
     });
     return body;
   }
