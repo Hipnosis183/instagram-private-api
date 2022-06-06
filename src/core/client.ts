@@ -2,6 +2,7 @@ import { State } from './state';
 import { Request } from './request';
 import { FeedFactory } from './feed.factory';
 import { AccountRepository } from '../repositories/account.repository';
+import { CollectionsRepository } from '../repositories/collections.repository';
 import { MediaRepository } from '../repositories/media.repository';
 import { ChallengeRepository } from '../repositories/challenge.repository';
 import { FriendshipRepository } from '../repositories/friendship.repository';
@@ -48,6 +49,7 @@ export class IgApiClient {
   public account = new AccountRepository(this);
   public attribution = new AttributionRepository(this);
   public challenge = new ChallengeRepository(this);
+  public collections = new CollectionsRepository(this);
   public consent = new ConsentRepository(this);
   public creatives = new CreativesRepository(this);
   public direct = new DirectRepository(this);
