@@ -57,10 +57,12 @@ export class Request {
   }
 
   public async send<T = any>(userOptions: Options, onlyCheckHttpStatus?: boolean): Promise<IgResponse<T>> {
+    const host = userOptions.graphql ? 'instagram.com' : 'i.instagram.com';
+    delete userOptions['graphql'];
     const options = defaultsDeep(
       userOptions,
       {
-        baseUrl: 'https://i.instagram.com/',
+        baseUrl: `https://${host}/`,
         resolveWithFullResponse: true,
         proxy: this.client.state.proxyUrl,
         simple: false,
@@ -68,7 +70,7 @@ export class Request {
         jar: this.client.state.cookieJar,
         strictSSL: false,
         gzip: true,
-        headers: this.getDefaultHeaders(),
+        headers: this.getDefaultHeaders(host),
         method: 'GET',
       },
       this.defaults,
@@ -180,7 +182,7 @@ export class Request {
     }
   }
 
-  public getDefaultHeaders() {
+  public getDefaultHeaders(host: string) {
     return {
       'User-Agent': this.client.state.appUserAgent,
       'X-Ads-Opt-Out': this.client.state.adsOptOut ? '1' : '0',
@@ -210,7 +212,7 @@ export class Request {
       'Accept-Language': this.client.state.language.replace('_', '-'),
       'X-FB-HTTP-Engine': 'Liger',
       Authorization: this.client.state.authorization,
-      Host: 'i.instagram.com',
+      Host: host,
       'Accept-Encoding': 'gzip',
       Connection: 'close',
     };
