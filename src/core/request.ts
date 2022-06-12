@@ -56,9 +56,12 @@ export class Request {
     return resolveWithFullResponse ? response : response.body;
   }
 
-  public async send<T = any>(userOptions: Options, onlyCheckHttpStatus?: boolean): Promise<IgResponse<T>> {
-    const host = userOptions.graphql ? 'instagram.com' : 'i.instagram.com';
-    delete userOptions['graphql'];
+  public async send<T = any>(
+    userOptions: Options,
+    onlyCheckHttpStatus?: boolean,
+    graphql?: boolean,
+  ): Promise<IgResponse<T>> {
+    const host = graphql ? 'instagram.com' : 'i.instagram.com';
     const options = defaultsDeep(
       userOptions,
       {

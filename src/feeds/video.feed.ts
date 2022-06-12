@@ -14,18 +14,21 @@ export class VideoFeed extends Feed<any> {
   }
 
   async request(): Promise<any> {
-    const { body } = await this.client.request.send({
-      url: `/graphql/query/`,
-      graphql: true,
-      qs: {
-        query_hash: 'bc78b344a68ed16dd5d7f264681c4c76',
-        variables: JSON.stringify({
-          id: this.id,
-          first: 24,
-          after: this.nextCursor,
-        }),
+    const { body } = await this.client.request.send(
+      {
+        url: `/graphql/query/`,
+        qs: {
+          query_hash: 'bc78b344a68ed16dd5d7f264681c4c76',
+          variables: JSON.stringify({
+            id: this.id,
+            first: 24,
+            after: this.nextCursor,
+          }),
+        },
       },
-    }, true);
+      true,
+      true,
+    );
     this.state = body.data.user.edge_felix_video_timeline;
     return body.data.user.edge_felix_video_timeline;
   }
