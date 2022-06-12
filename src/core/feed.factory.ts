@@ -31,6 +31,7 @@ import {
   UsertagsFeed,
   IgtvBrowseFeed,
   IgtvChannelFeed,
+  VideoFeed,
   LikedFeed,
   TopicalExploreFeed,
 } from '../feeds';
@@ -333,6 +334,12 @@ export class FeedFactory {
    */
   public igtvChaining(id: string | number) {
     return this.igtvChannel(`chaining_${id}`);
+  }
+
+  public video(id: string | number): VideoFeed {
+    const feed = new VideoFeed(this.client);
+    feed.id = id;
+    return feed;
   }
 
   public liked(): LikedFeed {
