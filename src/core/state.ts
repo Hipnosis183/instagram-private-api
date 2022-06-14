@@ -12,15 +12,6 @@ import { IgCookieNotFoundError, IgNoCheckpointError, IgUserIdNotFoundError } fro
 import { Enumerable } from '../decorators';
 import debug from 'debug';
 
-const AUTHORIZATION_TAG: unique symbol = Symbol('authorization-tag');
-
-interface ParsedAuthorization {
-  ds_user_id: string;
-  sessionid: string;
-  should_use_header_over_cookie: string;
-  [AUTHORIZATION_TAG]: string;
-}
-
 export class State {
   private static stateDebug = debug('ig:state');
   get signatureKey(): string {
@@ -73,7 +64,7 @@ export class State {
   language: string = 'en_US';
   timezoneOffset: string = String(new Date().getTimezoneOffset() * -60);
   radioType = 'wifi-none';
-  capabilitiesHeader = '3brTv10=';
+  capabilitiesHeader = '3brTvwE=';
   connectionTypeHeader = 'WIFI';
   isLayoutRTL: boolean = false;
   euDCEnabled?: boolean = undefined;
@@ -110,16 +101,13 @@ export class State {
   clientSessionIdLifetime: number = 1200000;
   pigeonSessionIdLifetime: number = 1200000;
 
-  @Enumerable(false)
-  parsedAuthorization?: ParsedAuthorization;
-
   /**
    * The current application session ID.
    *
    * This is a temporary ID which changes in the official app every time the
    * user closes and re-opens the Instagram application or switches account.
    *
-   * We will update it once an hour
+   * We will update it once an hour.
    */
   public get clientSessionId(): string {
     return this.generateTemporaryGuid('clientSessionId', this.clientSessionIdLifetime);
@@ -168,6 +156,14 @@ export class State {
     return `/api/v1${this.checkpoint.challenge.api_path}`;
   }
 
+  /**
+   * In newer app versions, the authentication changed from CSRF tokens to
+   * OAuth Bearer tokens, therefore changing the way it works.
+   *
+   * The implementation to support this new behaviour will require to change
+   * a lot of things, and extensive research and testing to make sure that
+   * everything keeps being functional.
+   */
   public get cookieCsrfToken() {
     try {
       return this.extractCookieValue('csrftoken');
@@ -178,16 +174,7 @@ export class State {
   }
 
   public get cookieUserId() {
-    const cookie = this.extractCookie('ds_user_id');
-    if (cookie !== null) {
-      return cookie.value;
-    }
-    this.updateAuthorization();
-    if (!this.parsedAuthorization) {
-      State.stateDebug('Could not find ds_user_id');
-      throw new IgCookieNotFoundError('ds_user_id');
-    }
-    return this.parsedAuthorization.ds_user_id;
+    return this.extractCookieValue('ds_user_id');
   }
 
   public get cookieUsername() {
@@ -279,26 +266,5 @@ export class State {
 
   private generateTemporaryGuid(seed: string, lifetime: number) {
     return new Chance(`${seed}${this.deviceId}${Math.round(Date.now() / lifetime)}`).guid();
-  }
-  private hasValidAuthorization() {
-    return this.parsedAuthorization && this.parsedAuthorization[AUTHORIZATION_TAG] === this.authorization;
-  }
-
-  private updateAuthorization() {
-    if (!this.hasValidAuthorization()) {
-      if (this.authorization?.startsWith('Bearer IGT:2:')) {
-        try {
-          this.parsedAuthorization = {
-            ...JSON.parse(Buffer.from(this.authorization.substring('Bearer IGT:2:'.length), 'base64').toString()),
-            [AUTHORIZATION_TAG]: this.authorization,
-          };
-        } catch (e) {
-          State.stateDebug(`Could not parse authorization: ${e}`);
-          this.parsedAuthorization = undefined;
-        }
-      } else {
-        this.parsedAuthorization = undefined;
-      }
-    }
   }
 }
