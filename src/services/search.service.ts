@@ -17,11 +17,14 @@ export class SearchService extends Repository {
     const result = await this.client.tag.search(query);
     return result.results;
   }
+  public async recent() {
+    const result = await this.client.fbsearch.recentSearches();
+    return result.recent;
+  }
   public async places(query: string) {
     const result = await this.client.fbsearch.places(query);
     return result.items;
   }
-
   public async location(latitude: number, longitude: number, query?: string) {
     const result = await this.client.locationSearch.index(latitude, longitude, query);
     return result.venues;
