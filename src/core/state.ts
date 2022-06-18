@@ -18,6 +18,10 @@ export class State {
     return this.constants.SIGNATURE_KEY;
   }
 
+  get signatureKeyOld(): string {
+    return this.constants.SIGNATURE_KEY_OLD;
+  }
+
   get signatureVersion(): string {
     return this.constants.SIGNATURE_VERSION;
   }
@@ -30,8 +34,16 @@ export class State {
     return this.constants.APP_VERSION;
   }
 
+  get appVersionOld(): string {
+    return this.constants.APP_VERSION_OLD;
+  }
+
   get appVersionCode(): string {
     return this.constants.APP_VERSION_CODE;
+  }
+
+  get appVersionCodeOld(): string {
+    return this.constants.APP_VERSION_CODE_OLD;
   }
 
   get fbAnalyticsApplicationId(): string {
@@ -56,6 +68,10 @@ export class State {
 
   get bloksVersionId(): string {
     return this.constants.BLOKS_VERSION_ID;
+  }
+
+  get bloksVersionIdOld(): string {
+    return this.constants.BLOKS_VERSION_ID_OLD;
   }
 
   @Enumerable(false)
@@ -119,6 +135,10 @@ export class State {
 
   public get appUserAgent() {
     return `Instagram ${this.appVersion} Android (${this.deviceString}; ${this.language}; ${this.appVersionCode})`;
+  }
+
+  public get appUserAgentOld() {
+    return `Instagram ${this.appVersionOld} Android (${this.deviceString}; ${this.language}; ${this.appVersionCodeOld})`;
   }
 
   public get webUserAgent() {

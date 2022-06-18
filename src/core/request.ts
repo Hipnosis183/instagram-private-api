@@ -60,6 +60,7 @@ export class Request {
     userOptions: Options,
     onlyCheckHttpStatus?: boolean,
     graphql?: boolean,
+    legacy?: boolean,
   ): Promise<IgResponse<T>> {
     const host = graphql ? 'instagram.com' : 'i.instagram.com';
     const options = defaultsDeep(
@@ -73,7 +74,7 @@ export class Request {
         jar: this.client.state.cookieJar,
         strictSSL: false,
         gzip: true,
-        headers: this.getDefaultHeaders(host),
+        headers: this.getDefaultHeaders(host, legacy),
         method: 'GET',
       },
       this.defaults,
@@ -117,9 +118,15 @@ export class Request {
       .digest('hex');
   }
 
-  public sign(payload: Payload): SignedPost {
+  public signatureOld(data: string) {
+    return createHmac('sha256', this.client.state.signatureKeyOld)
+      .update(data)
+      .digest('hex');
+  }
+
+  public sign(payload: Payload, legacy?: boolean): SignedPost {
     const json = typeof payload === 'object' ? JSON.stringify(payload) : payload;
-    const signature = this.signature(json);
+    const signature = legacy ? this.signatureOld(json) : this.signature(json);
     return {
       ig_sig_key_version: this.client.state.signatureVersion,
       signed_body: `${signature}.${json}`,
@@ -185,11 +192,10 @@ export class Request {
     }
   }
 
-  public getDefaultHeaders(host: string) {
+  public getDefaultHeaders(host: string, legacy: boolean) {
     return {
-      'User-Agent': this.client.state.appUserAgent,
+      'User-Agent': legacy ? this.client.state.appUserAgentOld : this.client.state.appUserAgent,
       'X-Ads-Opt-Out': this.client.state.adsOptOut ? '1' : '0',
-      // needed? 'X-DEVICE-ID': this.client.state.uuid,
       'X-CM-Bandwidth-KBPS': '-1.000',
       'X-CM-Latency': '-1.000',
       'X-IG-App-Locale': this.client.state.language,
@@ -203,7 +209,7 @@ export class Request {
       'X-IG-EU-DC-ENABLED':
         typeof this.client.state.euDCEnabled === 'undefined' ? void 0 : this.client.state.euDCEnabled.toString(),
       'X-IG-Extended-CDN-Thumbnail-Cache-Busting-Value': this.client.state.thumbnailCacheBustingValue.toString(),
-      'X-Bloks-Version-Id': this.client.state.bloksVersionId,
+      'X-Bloks-Version-Id': legacy ? this.client.state.bloksVersionIdOld : this.client.state.bloksVersionId,
       'X-MID': this.client.state.extractCookie('mid')?.value,
       'X-IG-WWW-Claim': this.client.state.igWWWClaim || '0',
       'X-Bloks-Is-Layout-RTL': this.client.state.isLayoutRTL.toString(),
