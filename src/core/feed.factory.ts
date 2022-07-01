@@ -14,6 +14,7 @@ import {
   PostsInsightsFeed,
   LocationFeed,
   MediaCommentsFeed,
+  MediaCommentsChildFeed,
   MusicGenreFeed,
   MusicMoodFeed,
   MusicSearchFeed,
@@ -41,7 +42,6 @@ import * as Chance from 'chance';
 import { PostsInsightsFeedOptions, TimelineFeedReason, IgAppModule } from '../types';
 import { UserStoryFeed } from '../feeds/user-story.feed';
 import { ListReelMediaViewerFeed } from '../feeds/list-reel-media-viewer.feed';
-import { MediaInlineChildCommentsFeed } from '../feeds/media.inline-child-comments.feed';
 import { MediaStickerResponsesFeed } from '../feeds/media.sticker-responses.feed';
 import {
   StorySliderVotersFeedResponseResponseRootObject,
@@ -161,6 +161,13 @@ export class FeedFactory {
     return feed;
   }
 
+  public mediaCommentsChild(mediaId: string, commentId: string): MediaCommentsChildFeed {
+    const feed = new MediaCommentsChildFeed(this.client);
+    feed.mediaId = mediaId;
+    feed.commentId = commentId;
+    return feed;
+  }
+
   public reelsMedia(options: { userIds: Array<number | string>; source?: IgAppModule }): ReelsMediaFeed {
     return plainToClassFromExist(new ReelsMediaFeed(this.client), options);
   }
@@ -242,14 +249,6 @@ export class FeedFactory {
 
   public listReelMediaViewers(mediaId: string): ListReelMediaViewerFeed {
     return plainToClassFromExist(new ListReelMediaViewerFeed(this.client), { mediaId });
-  }
-
-  public mediaInlineChildComments(mediaId: string, commentId: string, minId?: string): MediaInlineChildCommentsFeed {
-    return plainToClassFromExist(new MediaInlineChildCommentsFeed(this.client), {
-      mediaId,
-      commentId,
-      nextMinId: minId,
-    });
   }
 
   public igtvBrowse(isPrefetch?: boolean): IgtvBrowseFeed {
