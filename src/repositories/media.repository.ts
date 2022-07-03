@@ -130,6 +130,18 @@ export class MediaRepository extends Repository {
     });
   }
 
+  public async likeVisibilityUpdate(mediaId: string, disabled: boolean) {
+    const { body } = await this.client.request.send({
+      url: `/api/v1/media/update_like_and_view_counts_visibility/`,
+      method: 'POST',
+      form: this.client.request.sign({
+        like_and_view_counts_disabled: disabled,
+        media_id: mediaId,
+      }),
+    });
+    return body;
+  }
+
   public async likeComment(commentId: string) {
     const { body } = await this.client.request.send({
       url: `/api/v1/media/${commentId}/comment_like/`,
