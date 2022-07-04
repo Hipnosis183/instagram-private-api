@@ -124,4 +124,26 @@ export class UserRepository extends Repository {
     });
     return body;
   }
+
+  async pin(mediaId: string) {
+    const { body } = await this.client.request.send({
+      url: `/api/v1/users/pin_timeline_media/`,
+      method: 'POST',
+      form: this.client.request.sign({
+        post_id: mediaId,
+      }),
+    });
+    return body;
+  }
+
+  async unpin(mediaId: string) {
+    const { body } = await this.client.request.send({
+      url: `/api/v1/users/unpin_timeline_media/`,
+      method: 'POST',
+      form: this.client.request.sign({
+        post_id: mediaId,
+      }),
+    });
+    return body;
+  }
 }
