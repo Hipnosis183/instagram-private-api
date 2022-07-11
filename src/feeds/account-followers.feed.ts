@@ -4,11 +4,9 @@ import { AccountFollowersFeedResponse, AccountFollowersFeedResponseUsersItem } f
 
 export class AccountFollowersFeed extends Feed<AccountFollowersFeedResponse, AccountFollowersFeedResponseUsersItem> {
   searchSurface?: string;
-  /**
-   * only 'default' seems to work
-   */
   order?: 'default' = 'default';
   query = '';
+  count?: number;
   enableGroups = true;
 
   id: number | string;
@@ -28,6 +26,7 @@ export class AccountFollowersFeed extends Feed<AccountFollowersFeedResponse, Acc
         search_surface: this.searchSurface,
         order: this.order,
         query: this.query,
+        count: this.count,
         enable_groups: this.enableGroups,
       },
     });

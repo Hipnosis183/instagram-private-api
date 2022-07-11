@@ -6,6 +6,7 @@ export class AccountFollowingFeed extends Feed<AccountFollowingFeedResponse, Acc
   searchSurface?: string;
   order?: 'default' | 'date_followed_latest' | 'date_followed_earliest' = 'default';
   query = '';
+  count?: number;
   enableGroups = true;
   includesHashtags = true;
 
@@ -27,6 +28,7 @@ export class AccountFollowingFeed extends Feed<AccountFollowingFeedResponse, Acc
         search_surface: this.searchSurface,
         order: this.order,
         query: this.query,
+        count: this.count,
         enable_groups: this.enableGroups,
         includes_hashtags: this.includesHashtags,
       },

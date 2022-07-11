@@ -61,7 +61,7 @@ export class FeedFactory {
     options?:
       | string
       | number
-      | Partial<Pick<AccountFollowersFeed, 'searchSurface' | 'order' | 'query' | 'enableGroups' | 'id'>>,
+      | Partial<Pick<AccountFollowersFeed, 'searchSurface' | 'order' | 'query' | 'count' | 'enableGroups' | 'id'>>,
   ): AccountFollowersFeed {
     return plainToClassFromExist(new AccountFollowersFeed(this.client), {
       id: options && typeof options !== 'object' ? options : this.client.state.cookieUserId,
@@ -74,7 +74,10 @@ export class FeedFactory {
       | string
       | number
       | Partial<
-          Pick<AccountFollowingFeed, 'searchSurface' | 'order' | 'query' | 'enableGroups' | 'includesHashtags' | 'id'>
+          Pick<
+            AccountFollowingFeed,
+            'searchSurface' | 'order' | 'query' | 'count' | 'enableGroups' | 'includesHashtags' | 'id'
+          >
         >,
   ): AccountFollowingFeed {
     return plainToClassFromExist(new AccountFollowingFeed(this.client), {
