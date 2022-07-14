@@ -4,7 +4,7 @@ import {
   FriendshipRepositoryChangeResponseRootObject,
   FriendshipRepositorySetBestiesResponseRootObject,
 } from '../responses';
-import { SetBestiesInput } from '../types';
+import { SetBestiesInput, SetFavoritesInput } from '../types';
 
 export class FriendshipRepository extends Repository {
   async show(id: string | number) {
@@ -87,7 +87,24 @@ export class FriendshipRepository extends Repository {
         remove: input.remove,
       }),
     });
+    return body.friendship_statuses;
+  }
 
+  async updateFeedFavorites(input: SetFavoritesInput = {}) {
+    const { body } = await this.client.request.send({
+      url: `/api/v1/friendships/update_feed_favorites/`,
+      method: 'POST',
+      form: this.client.request.sign({
+        _csrftoken: this.client.state.cookieCsrfToken,
+        _uid: this.client.state.cookieUserId,
+        device_id: this.client.state.deviceId,
+        _uuid: this.client.state.uuid,
+        module: 'favorites_home_list',
+        block_on_empty_thread_creation: false,
+        add: input.add,
+        remove: input.remove,
+      }),
+    });
     return body.friendship_statuses;
   }
 
