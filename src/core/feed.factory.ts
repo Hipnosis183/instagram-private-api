@@ -1,5 +1,6 @@
 import { IgApiClient } from './client';
 import {
+  AccountFollowersMutualFeed,
   AccountFollowersFeed,
   AccountFollowingFeed,
   BestiesFeed,
@@ -56,6 +57,12 @@ import {
 
 export class FeedFactory {
   constructor(private client: IgApiClient) {}
+
+  public accountFollowersMutual(id: string | number): AccountFollowersMutualFeed {
+    const feed = new AccountFollowersMutualFeed(this.client);
+    feed.id = id;
+    return feed;
+  }
 
   public accountFollowers(
     options?:

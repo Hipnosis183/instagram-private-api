@@ -1,3 +1,4 @@
+export * from './account-followers-mutual.feed';
 export * from './account-followers.feed';
 export * from './account-following.feed';
 export * from './account-friendships.feed';
