@@ -33,4 +33,5 @@ export * from './igtv.browse.feed';
 export * from './igtv.channel.feed';
 export * from './video.feed';
 export * from './liked.feed';
+export * from './liked-by.feed';
 export * from './topical-explore.feed';

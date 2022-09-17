@@ -35,6 +35,7 @@ import {
   IgtvChannelFeed,
   VideoFeed,
   LikedFeed,
+  LikedByFeed,
   TopicalExploreFeed,
 } from '../feeds';
 import { DirectInboxFeedResponseThreadsItem } from '../responses';
@@ -353,6 +354,12 @@ export class FeedFactory {
 
   public liked(): LikedFeed {
     return new LikedFeed(this.client);
+  }
+
+  public likedBy(shortcode: string): LikedByFeed {
+    const feed = new LikedByFeed(this.client);
+    feed.shortcode = shortcode;
+    return feed;
   }
 
   public topicalExplore(

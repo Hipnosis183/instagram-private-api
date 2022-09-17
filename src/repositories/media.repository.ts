@@ -259,6 +259,7 @@ export class MediaRepository extends Repository {
     return body;
   }
 
+  // Limited at 100-120 likes, and no pagination support.
   public async likers(id: string): Promise<MediaRepositoryLikersResponseRootObject> {
     const { body } = await this.client.request.send<MediaRepositoryLikersResponseRootObject>({
       url: `/api/v1/media/${id}/likers/`,
