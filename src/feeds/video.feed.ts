@@ -35,6 +35,6 @@ export class VideoFeed extends Feed<any> {
 
   async items(): Promise<any[]> {
     const res = await this.request();
-    return res.edges;
+    return res.edges.map((i: any) => i.node);
   }
 }

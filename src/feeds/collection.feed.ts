@@ -24,6 +24,6 @@ export class CollectionFeed extends Feed<any> {
 
   async items(): Promise<any[]> {
     const { items } = await this.request();
-    return items.map(i => i.media);
+    return items.map((i: any) => i.media);
   }
 }
