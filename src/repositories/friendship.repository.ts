@@ -51,8 +51,40 @@ export class FriendshipRepository extends Repository {
     return this.change('ignore', id, mediaIdAttribution);
   }
 
-  async removeFollower(id: string | number) {
-    return this.change('remove_follower', id);
+  async removeFollower(id: string | number, mediaIdAttribution?: string) {
+    return this.change('remove_follower', id, mediaIdAttribution);
+  }
+
+  async favorite(id: string | number, mediaIdAttribution?: string) {
+    return this.change('favorite', id, mediaIdAttribution);
+  }
+
+  async unfavorite(id: string | number, mediaIdAttribution?: string) {
+    return this.change('unfavorite', id, mediaIdAttribution);
+  }
+
+  async favoriteStories(id: string | number, mediaIdAttribution?: string) {
+    return this.change('favorite_for_stories', id, mediaIdAttribution);
+  }
+
+  async unfavoriteStories(id: string | number, mediaIdAttribution?: string) {
+    return this.change('unfavorite_for_stories', id, mediaIdAttribution);
+  }
+
+  async favoriteIgtv(id: string | number, mediaIdAttribution?: string) {
+    return this.change('favorite_for_igtv', id, mediaIdAttribution);
+  }
+
+  async unfavoriteIgtv(id: string | number, mediaIdAttribution?: string) {
+    return this.change('unfavorite_for_igtv', id, mediaIdAttribution);
+  }
+
+  async favoriteClips(id: string | number, mediaIdAttribution?: string) {
+    return this.change('favorite_for_clips', id, mediaIdAttribution);
+  }
+
+  async unfavoriteClips(id: string | number, mediaIdAttribution?: string) {
+    return this.change('unfavorite_for_clips', id, mediaIdAttribution);
   }
 
   private async change(action: string, id: string | number, mediaIdAttribution?: string) {
