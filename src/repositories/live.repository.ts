@@ -397,9 +397,20 @@ export class LiveRepository extends Repository {
     return body;
   }
 
-  /**
-   * Shows all online users, ready to watch your stream
-   */
+  // Preference values: 'default', 'none' or 'all'.
+  public async setSubscriptionPreference(id: string | number, preference: string = 'default') {
+    const { body } = await this.client.request.send({
+      url: `/api/v1/live/${id}/set_subscription_preference/`,
+      method: 'POST',
+      form: this.client.request.sign({
+        preference: preference,
+        _uuid: this.client.state.uuid,
+      }),
+    });
+    return body;
+  }
+
+  // Shows all online users, ready to watch your stream
   public async getLivePresence(): Promise<any> {
     const { body } = await this.client.request.send({
       url: '/api/v1/live/get_live_presence/',
